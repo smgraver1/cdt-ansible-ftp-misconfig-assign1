@@ -1,7 +1,7 @@
 # Vulnerable FTP Infrastructure - CDT - Stephen Graver - Assignment #2
 
 ## Project Overview
-This project automates the deployment of a multi-node vulnerable infrastructure. It utilizes Ansible to programmatically misconfigure a DMZ FTP Gateway and establish Internal Pivot Targets for our competition. It also serves as a controlled environment where reconnaisssance practice and access via service misconfigurations can be used. As well as lateral movement between different segmented networks.
+This project automates the deployment of a multi-node vulnerable infrastructure. It utilizes Ansible to programmatically misconfigure a DMZ FTP Gateway and establish Internal Pivot Targets for our competition. It also serves as a controlled environment where reconnaissance practice and access via service misconfigurations can be used. As well as lateral movement between different segmented networks.
 
 ## Vulnerability Description
 The primary vulnerability is a anaymous FTP misconfiguration combined with a sensitive credential data leak. The vsftpd service is configured to allow unauthorized access to a world writable drop zone directory. This contains a hidden file with cleartext credentials for internal systems and the app and db ip. This shows the high risk of insecure FTP and the danger of credential reuse and not a secure password either.

@@ -3,7 +3,6 @@
 .ansible/
 fact_cache/
 .ansible_cache/
-inventory.ini
 inventory/
 *.vault
 .env
