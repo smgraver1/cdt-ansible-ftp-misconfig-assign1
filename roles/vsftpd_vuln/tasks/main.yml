@@ -40,3 +40,19 @@
     shell: /bin/bash
     groups: sudo
     append: yes
+
+- name: Secure the FTP root directory
+  ansible.builtin.file:
+    path: "{{ ftp_root_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create the Vulnerable public drop-zone
+  ansible.builtin.file:
+    path: "{{ ftp_root_dir }}/public"
+    state: directory
+    owner: ftp
+    group: ftp
+    mode: '0777'
