@@ -44,6 +44,7 @@ The primary vulnerability is a anaymous FTP misconfiguration combined with a sen
 
 ## Repository Structure
 
+```text
 CDT-ANSIBLE-FTP-MISCONFIG-ASSIGN1/
 ├── docs/                               # Final Documentation PDFs
 │   ├── DEPLOYMENT.pdf                  # Deployment Guide
@@ -77,3 +78,4 @@ CDT-ANSIBLE-FTP-MISCONFIG-ASSIGN1/
 ├── README.md                           # Main documentation (this file)
 ├── setup-ssh.sh                        # Automation for SSH key exchange
 └── validate.yml                        # Automated security audit playbook
+```
