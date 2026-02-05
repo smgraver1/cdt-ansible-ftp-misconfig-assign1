@@ -29,10 +29,10 @@ ftp_user_shell: "/bin/bash"
 ftp_gateway_ip: "{{ hostvars['dmz-ftp-gateway']['ansible_host'] }}"
 
 # VM 2: Where the important data resides
-app_server_ip: "{{ hostvars['int-srv-app-01']['ansible_host'] }}"
+app_server_ip: "{{ hostvars['internal-app-serv']['ansible_host'] }}"
 
 # VM 3: The internal backup server for exploitation
-db_server_ip: "{{ hostvars['int-srv-db-01']['ansible_host'] }}"
+db_server_ip: "{{ hostvars['internal-db-serv']['ansible_host'] }}"
 
 # Logging config
 ftp_log_path: "/var/log/vsftpd.log"

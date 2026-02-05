@@ -56,3 +56,14 @@
     owner: ftp
     group: ftp
     mode: '0777'
+
+- name: Create "leaked" credential file for exploitation discovery
+  ansible.builtin.copy:
+    dest: "{{ ftp_root_dir }}/public/.dev_notes.txt"
+    content: |
+      # Testing credentials for pivot targets ({{ app_server_ip }} and {{ db_server_ip }}):
+      # User: {{ ftp_user }}
+      # Pass: {{ ftp_pass }}
+    owner: ftp
+    group: ftp
+    mode: '0644'
