@@ -34,6 +34,6 @@ app_server_ip: "{{ hostvars['int-srv-app-01']['ansible_host'] }}"
 # VM 3: The internal backup server for exploitation
 db_server_ip: "{{ hostvars['int-srv-db-01']['ansible_host'] }}"
 
-# Logging config for defense
+# Logging config
 ftp_log_path: "/var/log/vsftpd.log"
 ftp_banner: "Welcome to the Corporate Development FTP. Unauthorized access is logged."

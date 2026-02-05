@@ -21,8 +21,8 @@
     - "{{ ftp_root_dir }}"
     - "{{ ftp_root_dir }}/public"
 
-# Deploys misconfigured vsftpd.conf file
-- name: Deploy misconfigured vsftpd.conf
+# Deploys vsftpd.conf file
+- name: Deploy vsftpd.conf
   ansible.builtin.template:
     src: vsftpd.conf.j2
     dest: /etc/vsftpd.conf
