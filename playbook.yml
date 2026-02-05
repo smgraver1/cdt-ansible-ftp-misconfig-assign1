@@ -1,4 +1,4 @@
-# Assignment: CDT Assignment 1 - FTP Vulnerability
+# Assignment: CDT Assignment 2 - FTP Vulnerability
 # target: Ubuntu 22.04 / 24.04 LTS
 # this playbook deploys a misconfigured vsftpd service using ansible installed on the main VM doing the server communication
 
