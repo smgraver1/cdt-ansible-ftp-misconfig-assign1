@@ -18,3 +18,4 @@ Thumbs.db
 .history/
 *.code-workspace
 *.swp
+.dev_notes.txt
