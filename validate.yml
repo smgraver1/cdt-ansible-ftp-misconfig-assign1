@@ -1,0 +1,90 @@
+# Validation Playbook - Verify Your Vulnerable FTP Environment
+# Purpose: This playbook verifies the intentional misconfigurations deployed to your Ubuntu stack with Ansible.
+# Command: ansible-playbook validate.yml -i inventory.ini
+
+
+- name: Validate FTP Gateway Vulnerabilities
+  hosts: gateway
+  become: true
+  tags: validate-gateway
+
+  tasks:
+  # Gets the current state of all system services and puts them in a directory
+    - name: Gather service status
+      ansible.builtin.service_facts:
+
+  # Used to verify that the vsftpd daemon is installed and running and managed by systemd
+    - name: "CHECK: vsftpd service is running"
+      ansible.builtin.assert:
+        that:
+          - "'vsftpd.service' in ansible_facts.services"
+          - "ansible_facts.services['vsftpd.service'].state == 'running'"
+        fail_msg: "FAIL: vsftpd service is not running on temp-1."
+        success_msg: "PASS: vsftpd service is running on temp-1"
+
+  # Checks the configuration file to ensure the misconfiguration of the FTP and vsftpd
+    - name: Verify anonymous access configuration
+      ansible.builtin.command: grep "anonymous_enable=YES" /etc/vsftpd.conf
+      register: anon_check
+      changed_when: false
+      failed_when: false
+
+  # Verifies the grep return code to see if the string was found for rc
+    - name: "CHECK: Anonymous FTP is enabled (Intentional Vulnerability)"
+      ansible.builtin.assert:
+        that:
+          - "anon_check.rc == 0"
+        fail_msg: "FAIL: Anonymous access is NOT enabled in /etc/vsftpd.conf."
+        success_msg: "PASS: Anonymous access is ENABLED (Vulnerable state confirmed)"
+
+  # Gets filesystem data and is used to verify the chmod permissions to allow any user to write to the folder
+    - name: Check FTP drop-zone permissions
+      ansible.builtin.stat:
+        path: "{{ ftp_root_dir }}/public"
+      register: dropzone_stat
+
+    - name: "CHECK: FTP drop-zone has weak permissions (0777)"
+      ansible.builtin.assert:
+        that:
+          - "dropzone_stat.stat.mode == '0777'"
+        fail_msg: "FAIL: Drop-zone permissions are not 0777."
+        success_msg: "PASS: Drop-zone is world-writable (Exploitation vector confirmed)"
+
+- name: Validate Pivot Targets and Credentials
+  hosts: 
+    - internal_servers
+  become: true
+  tags: validate-targets
+
+  tasks:
+  # Check system user database
+    - name: Check for vulnerable developer user
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ ftp_user }}"
+      register: user_exists
+      failed_when: false
+
+  # Confirms that the dev user account was created on the target machines
+    - name: "CHECK: Vulnerable user account exists"
+      ansible.builtin.assert:
+        that:
+          - "user_exists is succeeded"
+        fail_msg: "FAIL: User '{{ ftp_user }}' was not found on this target."
+        success_msg: "PASS: User '{{ ftp_user }}' exists for pivot demonstration"
+
+  # Used to generate report for passes at the end of the validation test.
+    - name: Final Success Summary
+      ansible.builtin.debug:
+        msg:
+          - "  ALL CHECKS PASSED — Your Vulnerable FTP Stack is Active!"
+          - ""
+          - "  [gateway]  vsftpd service ............ PASS"
+          - "  [gateway]  Anonymous Access .......... PASS"
+          - "  [gateway]  Weak Permissions (0777) ... PASS"
+          - "  [targets]    Local User Account ........ PASS"
+          - ""
+          - "  Test locally from your control node using:"
+          - "  ftp -v {{ hostvars[groups['gateway'][0]]['ansible_host'] }}"
+          - "=========================================================="
+      run_once: true

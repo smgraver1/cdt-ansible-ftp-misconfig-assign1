@@ -1,0 +1,30 @@
+# Assignment: CDT Assignment 1 - FTP Vulnerability
+# target: Ubuntu 22.04 / 24.04 LTS
+# this playbook deploys a misconfigured vsftpd service using ansible installed on the main VM doing the server communication
+
+- name: Deploy Vulnerable Infrastructure
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  # handlers for service restarts of vsftpd
+  handlers:
+    - name: restart vsftpd
+      service:
+        name: vsftpd
+        state: restarted
+
+  roles:
+    - role: vsftpd_vuln
+      tags: ["ftp", "vulnerable"]
+
+# deployment verification
+- name: Verify Service Status
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure vsftpd is running and enabled
+      service:
+        name: vsftpd
+        state: started
+        enabled: yes

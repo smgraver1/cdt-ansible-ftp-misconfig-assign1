@@ -1,0 +1,42 @@
+# Main tasks for VSFTPD role
+
+# Defines the main logic for deploying the FTP service
+
+# Makes suire the vsftpd daemon is installed on the target system
+- name: Install vsftpd package
+  ansible.builtin.apt:
+    name: vsftpd
+    state: present
+    update_cache: yes
+
+# Creates the directory structure for FTP service and sets permissions of anyone can access for lab with 0777
+- name: Create FTP root and public drop-zone
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: ftp
+    group: ftp
+    mode: '0777'
+  loop:
+    - "{{ ftp_root_dir }}"
+    - "{{ ftp_root_dir }}/public"
+
+# Deploys misconfigured vsftpd.conf file
+- name: Deploy misconfigured vsftpd.conf
+  ansible.builtin.template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart vsftpd
+
+# creates local linux user account to simulate a dev profile with having sudo privilege and escalation of priv after an attacker finds vulnerability
+# Mainly due to bad configuration
+- name: Create vulnerable local user for pivot demonstration
+  ansible.builtin.user:
+    name: "{{ ftp_user }}"
+    password: "{{ ftp_pass | password_hash('sha512') }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes

@@ -1,0 +1,39 @@
+# variables for FTP deployment
+# Create environment across all 3 VMs
+
+# FTP service configuration on gateway VM
+
+# Service settings
+ftp_service_name: "vsftpd"
+ftp_port: 21
+
+# Core Vulnerability Settings
+ftp_anonymous_enable: "YES"
+ftp_local_enable: "YES"
+ftp_write_enable: "YES"
+
+# file paths
+ftp_root_dir: "/var/ftp"
+ftp_public_dir: "{{ ftp_root_dir }}/public"
+
+# Vulnerable user credentials
+# Account for Pivot/Privilege Escalation demonstration
+ftp_user: "dev_user"
+ftp_pass: "password123"      # Intentional weak password
+ftp_user_shell: "/bin/bash"
+
+# Infrastructure setup
+# These variables map the 3 Ubuntu VMs.
+
+# VM 1: The entry point for the attack
+ftp_gateway_ip: "{{ hostvars['dmz-ftp-gateway']['ansible_host'] }}"
+
+# VM 2: Where the important data resides
+app_server_ip: "{{ hostvars['int-srv-app-01']['ansible_host'] }}"
+
+# VM 3: The internal backup server for exploitation
+db_server_ip: "{{ hostvars['int-srv-db-01']['ansible_host'] }}"
+
+# Logging config for defense
+ftp_log_path: "/var/log/vsftpd.log"
+ftp_banner: "Welcome to the Corporate Development FTP. Unauthorized access is logged."

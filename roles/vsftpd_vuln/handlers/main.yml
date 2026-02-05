@@ -1,0 +1,10 @@
+# Handlers for the Vulnerable vsftpd Role
+
+# These tasks only run when notified by a task that results in a 'changed' state. Helps avoid unnecessary service restarts.
+
+- name: restart vsftpd
+# enables root
+  become: yes
+  ansible.builtin.service:
+    name: vsftpd
+    state: restarted
