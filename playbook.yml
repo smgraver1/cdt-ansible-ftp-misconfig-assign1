@@ -2,6 +2,16 @@
 # target: Ubuntu 22.04 / 24.04 LTS
 # this playbook deploys a misconfigured vsftpd service using ansible installed on the main VM doing the server communication
 
+# Prerequisites - You need a main VM running ubuntu linux with ansible installed
+# and ssh enabled. You need to then on your main machine run VS code and install the ansible package and 
+# Remote SSH package. Connect to the main VM over the remote SSH. clone this repo to your main VM. 
+# Setup 3 other ubuntu machines with SSH enabled. Change the IP's in inventory.ini to the IP's of these 3 
+# VMs. Run the setup-ssh.sh to ensure you can connect over ssh to your VMs from the main VM.
+# run "ansible all -m ping" to ensure ansible is working and connecting to the machines.
+# Then run "ansible-playbook playbook.yml" This should install and setup your VMs to run
+# The program. Then run "ansible-playbook validate.yml -i inventory.ini" to validate if everything
+# Is working and passes all the security flaws.
+
 - name: Deploy Vulnerable Infrastructure
   hosts: all
   become: yes
