@@ -22,8 +22,8 @@ The primary vulnerability is a anaymous FTP misconfiguration combined with a sen
   - ansible-playbook validate.yml -i inventory.ini # Audit the security state and vsftpd
 
 ## Documentation
-[Deployment Guide](./docs/DEPLOYMENT.md) - Step by step setup, prerequistes and verification screenshots
-[Exploitation Guide](./docs/EXPLOITATION.md) - Walkthrough of the attack vector, reconnaissance, and defensive mitigations
+* [Deployment Guide](./docs/DEPLOYMENT.pdf) - Step by step setup, prerequistes and verification screenshots
+* [Exploitation Guide](./docs/EXPLOITATION.pdf) - Walkthrough of the attack vector, reconnaissance, and defensive mitigations
 
 ## Competition Use Cases
 * Red Team: Use the environment to practice automated harvesting of leaked credentials and pivoting from a gateway to internal server assets.
@@ -44,26 +44,36 @@ The primary vulnerability is a anaymous FTP misconfiguration combined with a sen
 
 ## Repository Structure
 
-ansible-vuln-deployment/
-├── README.md        # Main documentation
-├── playbook.yml     # Main Ansible playbook
-├── inventory.ini    # inventory
-├── vars/
-│   └── main.yml     # Variables
-├── templates/       # Jinja2 templates (if needed)
-│   └── config.j2
-├── files/            # Static files to copy
-│   └── vulnerable_app.php
-├── screenshots/      # All screenshots
-│   ├── deployment/
-│   │   ├── ansible_run.png
-│   │   ├── service_running.png
-│   │   └── web_interface.png
-│   └── exploitation/
-│       ├── recon_scan.png
-│       ├── exploit_step1.png
-│       └── compromised_system.png
-├── docs/
-│   ├── DEPLOYMENT.md   # Deployment documentation
-│   └── EXPLOITATION.md # Exploitation guide
-└── .gitignore          # Git ignore file
+CDT-ANSIBLE-FTP-MISCONFIG-ASSIGN1/
+├── docs/                               # Final Documentation PDFs
+│   ├── DEPLOYMENT.pdf                  # Deployment Guide
+│   └── EXPLOITATION.pdf                # Exploitation Guide
+├── group_vars/                         # Variable Definitions
+│   └── all.yml                         # Global variables (IPs, creds)
+├── roles/vsftpd_vuln/                  # Core Vulnerability Role
+│   ├── handlers/
+│   │   └── main.yml                    # Service restart logic
+│   ├── tasks/
+│   │   └── main.yml                    # Installation
+│   └── templates/
+│       └── vsftpd.conf.j2              # configuration Jinja2 template
+├── screenshots/                        # Evidence for Rubric Requirements
+│   ├── deployment/                     # Verification & Status images
+│   │   ├── ansible-all-ping-example-script-pong.png
+│   │   ├── ansible-playbook-deployment-verification...
+│   │   ├── ansible-playbook-example-deployment.png
+│   │   ├── inventory-ini_labeled_IP_Credentials.png
+│   │   ├── manual-confirmation-for-validation-syste...
+│   │   ├── run_example_of_setup-ssh_script.png
+│   │   └── sudo-nmap-to-show-port-and-service-for...
+│   └── exploitation/                   # Attack Evidence images
+│       ├── dev-notes-file-how-to-access-and-conten...
+│       ├── exploitation-set-nmap-default-script-ftp-a...
+│       └── exploitation-vsftpd-log-gateway-show-ret...
+├── .gitignore                          # Prevents tracking of sensitive data
+├── ansible.cfg                         # Ansible execution settings
+├── inventory.ini                       # Infrastructure mapping (Gateway vs Internal)
+├── playbook.yml                        # Main deployment entry point
+├── README.md                           # Main documentation (this file)
+├── setup-ssh.sh                        # Automation for SSH key exchange
+└── validate.yml                        # Automated security audit playbook
